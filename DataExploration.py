@@ -35,11 +35,57 @@ def main(argv):
         print("Training data must have exactly one more column (label) than test data.")
         sys.exit()
 
+    print(" ")
+    print("### 1. Column names and count. ")
     print("Training data columns : " + ", ".join(str(x) for x in training_column_name) + ".")
     print("Number of columns in the training data: {}.".format(len(training_column_name)))
 
     print("Test data columns : " + ", ".join(str(x) for x in test_column_name) + ".")
     print("Number of columns in the test data: {}.".format(len(test_column_name)))
+    print(" ")
+    print(" ")
+
+    # 2. Identify the label and concatanate it with test data
+    for i in training_column_name:
+        if i not in test_column_name:
+            possible_label = i
+
+    print(" ")
+    print("### 2. Label identification. ")
+    user_answer = input(" '{}' is not in the test data. It might be a label, is it correct (y/n)? >>> ".format(possible_label))
+    if user_answer == 'y':
+        label = possible_label
+    elif user_answer == 'n':
+        not_done = True
+        while not_done:
+            user_answer = input("Please enter label name manually >>> ") # User manually specifying the label name
+            if user_answer in training_column_name:
+                not_done = False
+                label = user_answer
+            else:
+                print(" '{}' is not in the training column name".format(user_answer))
+    else:
+        print("Let's start over.")
+        sys.exit()       
+    print(" Label '{}' will be dropped and the training data and test data will be combined for feature engineering process. ".format(label))
+    
+    temp_train = train.copy()
+    temp_train = temp_train.drop([label], axis=1)
+    Data = pd.concat([temp_train, test])
+
+    print("Combined data is stored under variable named 'Data' (training + test) . ")
+    print(" ")
+    print(" ")
+
+    # 3. NULL count analysis
+    print(" ")
+    print("### 3. NULL count. ")
+    for i in list(Data):
+        this_null_count = Data[i].isnull().sum()
+        print("Column name: {} ----> Proportion of NULLs: {} / {}".format(i, this_null_count, Data.shape[0]))
+
+
+
 
     
 
