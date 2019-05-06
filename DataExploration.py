@@ -40,6 +40,8 @@ def main(argv):
 
     print("Test data columns : " + ", ".join(str(x) for x in test_column_name) + ".")
     print("Number of columns in the test data: {}.".format(len(test_column_name)))
+
+    print("hos about now")
     
 
         
