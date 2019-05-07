@@ -46,7 +46,7 @@ def main(argv):
     print(" ")
     print(" ")
 
-    # 2. Identify the label and concatanate it with test data
+    # 2. Identify the label and concatenate it with test data
     for i in training_column_name:
         if i not in test_column_name:
             possible_label = i
@@ -100,6 +100,12 @@ def main(argv):
     plt.xlabel("Column")
     plt.ylabel("NULL ratio (%)")
     plt.show(block=True)
+    plt.savefit("figre_1_NULL_count.png")
+
+    print(" ")
+    print(" ")
+
+    
 
 
 
