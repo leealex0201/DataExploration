@@ -2,6 +2,7 @@ import pandas as pd
 import warnings
 import os
 import sys, getopt
+import matplotlib.pyplot as plt
 
 def main(argv):
 
@@ -52,7 +53,7 @@ def main(argv):
 
     print(" ")
     print("### 2. Label identification. ")
-    user_answer = input(" '{}' is not in the test data. It might be a label, is it correct (y/n)? >>> ".format(possible_label))
+    user_answer = input("'{}' is not in the test data. It might be a label, is it correct (y/n)? >>> ".format(possible_label))
     if user_answer == 'y':
         label = possible_label
     elif user_answer == 'n':
@@ -63,11 +64,11 @@ def main(argv):
                 not_done = False
                 label = user_answer
             else:
-                print(" '{}' is not in the training column name".format(user_answer))
+                print("'{}' is not in the training column name".format(user_answer))
     else:
         print("Let's start over.")
         sys.exit()       
-    print(" Label '{}' will be dropped and the training data and test data will be combined for feature engineering process. ".format(label))
+    print("Label '{}' will be dropped and the training data and test data will be combined for feature engineering process. ".format(label))
     
     temp_train = train.copy()
     temp_train = temp_train.drop([label], axis=1)
@@ -80,9 +81,25 @@ def main(argv):
     # 3. NULL count analysis
     print(" ")
     print("### 3. NULL count. ")
+    null_count = []
+    null_count_ratio = []
     for i in list(Data):
         this_null_count = Data[i].isnull().sum()
+        null_count.append(this_null_count)
+        null_count_ratio.append(100*float(this_null_count)/float(Data.shape[0]))
         print("Column name: {} ----> Proportion of NULLs: {} / {}".format(i, this_null_count, Data.shape[0]))
+
+    # Figure 1. bar plots for NULL count
+    plt.figure(1, figsize=(11, 5))
+    plt.subplot(211)
+    plt.bar(list(Data),null_count)
+    plt.title("NULL in the data")
+    plt.ylabel("Count")
+    plt.subplot(212)
+    plt.bar(list(Data),null_count_ratio)
+    plt.xlabel("Column")
+    plt.ylabel("NULL ratio (%)")
+    plt.show(block=True)
 
 
 
